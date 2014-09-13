@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6220.14" systemVersion="13E28" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="CompletedSet" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="equalSetNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="reps" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="setNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <relationship name="lift" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Lift" inverseName="completedSets" inverseEntity="Lift" syncable="YES"/>
+    </entity>
+    <entity name="Day" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="lifts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Lift" inverseName="day" inverseEntity="Lift" syncable="YES"/>
+        <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="days" inverseEntity="Workout" syncable="YES"/>
+    </entity>
+    <entity name="Lift" syncable="YES">
+        <attribute name="increment" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="reps" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="sets" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <relationship name="completedSets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CompletedSet" inverseName="lift" inverseEntity="CompletedSet" syncable="YES"/>
+        <relationship name="day" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Day" inverseName="lifts" inverseEntity="Day" syncable="YES"/>
+    </entity>
+    <entity name="Workout" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="days" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Day" inverseName="workout" inverseEntity="Day" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="CompletedSet" positionX="106" positionY="288" width="128" height="135"/>
+        <element name="Day" positionX="-263" positionY="29" width="128" height="103"/>
+        <element name="Lift" positionX="-180" positionY="236" width="128" height="163"/>
+        <element name="Workout" positionX="-207" positionY="-180" width="128" height="73"/>
+    </elements>
+</model>
