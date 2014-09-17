@@ -74,10 +74,11 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
         
         var sortDescriptors = [NSSortDescriptor]()
         sortDescriptors.append(NSSortDescriptor(key: "date", ascending: false))
-        sortDescriptors.append(NSSortDescriptor(key: "lift.name", ascending: false))
+        sortDescriptors.append(NSSortDescriptor(key: "setTime", ascending: true))
+        //sortDescriptors.append(NSSortDescriptor(key: "lift.name", ascending: false))
         sortDescriptors.append(NSSortDescriptor(key: "setNumber", ascending: true))
         request.sortDescriptors = sortDescriptors
-        //request.predicate = NSPredicate(format: "lift.day.workout.name= %@", workoutData.valueForKey("name") as String)
+        request.predicate = NSPredicate(format: "lift.day.workout.name= %@", workoutData.valueForKey("name") as String)
         var data:NSArray = context.executeFetchRequest(request, error: nil)
         
         for setData in data {

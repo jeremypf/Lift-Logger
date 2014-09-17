@@ -43,7 +43,8 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
             }
         }
         else if segue.identifier? == "toLog" {
-            
+            var destination = segue.destinationViewController as LogViewController
+            destination.workoutData = workoutData
         }
     }
     
@@ -102,6 +103,11 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
         var context:NSManagedObjectContext = appDelegate.managedObjectContext!
         var request = NSFetchRequest(entityName: "Workout")
         request.predicate = NSPredicate(format: "name= %@", workout.name)
+        
+        /*var sortDescriptors = [NSSortDescriptor]()
+        sortDescriptors.append(NSSortDescriptor(key: "order", ascending: true))
+        request.sortDescriptors = sortDescriptors*/
+        
         var data:NSArray = context.executeFetchRequest(request, error: nil)
         
         var wData:NSManagedObject = data[0] as NSManagedObject
@@ -109,6 +115,7 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
         workoutData = wData
         tempWorkout = Workout(name: wData.valueForKey("name") as String)
         var dayDataSet:NSSet = wData.valueForKeyPath("days") as NSSet
+        
         
         for dayData in dayDataSet {
             var dData:NSManagedObject = dayData as NSManagedObject

@@ -122,7 +122,7 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
         
         var liftDataSet:NSSet = dayData.valueForKeyPath("lifts") as NSSet
         
-        var date = NSDate()
+        let date = NSDate()
         
         for (index,lift) in enumerate(day.lifts) {
             for lData in liftDataSet {
@@ -133,6 +133,8 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
                     var finishedWeight:Double = cells[index].sets[0].weight
                     
                     for (setIndex,set) in enumerate(cells[index].sets) {
+                        
+                        let setTime = NSDate()
                         
                         if (set.weight < finishedWeight) {
                             finishedWeight = set.weight
@@ -146,6 +148,7 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
                         newSet.setValue(set.reps, forKey: "reps")
                         newSet.setValue(set.weight, forKey: "weight")
                         newSet.setValue(date, forKey: "date")
+                        newSet.setValue(setTime, forKey: "setTime")
                         newSet.setValue(setIndex+1, forKey: "setNumber")
                         
                         liftData.mutableSetValueForKeyPath("completedSets").addObject(newSet)
