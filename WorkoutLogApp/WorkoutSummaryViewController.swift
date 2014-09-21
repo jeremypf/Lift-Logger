@@ -25,12 +25,12 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
     var rows = [AnyObject]()
     
     
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         
-        if segue.identifier? == "startSession" {
-            let row = tableView.indexPathForSelectedRow().row
+        if segue.identifier == "startSession" {
+            let row = tableView.indexPathForSelectedRow()?.row
             var destination = segue.destinationViewController as WorkoutViewController
-            destination.day = rows[row] as Day
+            destination.day = rows[row!] as Day
             
             var dayDataSet:NSSet = workoutData.valueForKeyPath("days") as NSSet
             
@@ -42,7 +42,7 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
                 }
             }
         }
-        else if segue.identifier? == "toLog" {
+        else if segue.identifier == "toLog" {
             var destination = segue.destinationViewController as LogViewController
             destination.workoutData = workoutData
         }
@@ -54,7 +54,7 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     
-    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int{
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         
         rows.removeAll(keepCapacity: true)
         for day in workout.days {
@@ -67,7 +67,7 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
         return rows.count
     }
     
-    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell!{
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         
         if rows[indexPath.row] is Day {
             var cell = tableView.dequeueReusableCellWithIdentifier("DaySummaryCell", forIndexPath: indexPath) as NameTableViewCell
@@ -108,7 +108,7 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
         sortDescriptors.append(NSSortDescriptor(key: "order", ascending: true))
         request.sortDescriptors = sortDescriptors*/
         
-        var data:NSArray = context.executeFetchRequest(request, error: nil)
+        var data:NSArray = context.executeFetchRequest(request, error: nil)!
         
         var wData:NSManagedObject = data[0] as NSManagedObject
         

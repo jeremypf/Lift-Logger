@@ -36,13 +36,13 @@ class MyWorkoutsViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         
         if segue.identifier == "toWorkout" {
-            let row = tableView.indexPathForSelectedRow().row
+            let row = tableView.indexPathForSelectedRow()?.row
             var destination = segue.destinationViewController as WorkoutSummaryViewController
-            destination.workout = workouts[row]
-            destination.workoutData = allWorkoutData[row]
+            destination.workout = workouts[row!]
+            destination.workoutData = allWorkoutData[row!]
         }
     }
     
@@ -55,7 +55,7 @@ class MyWorkoutsViewController: UIViewController, UITableViewDataSource, UITable
         var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         var context:NSManagedObjectContext = appDelegate.managedObjectContext!
         var request = NSFetchRequest(entityName: "Workout")
-        var data:NSArray = context.executeFetchRequest(request, error: nil)
+        var data:NSArray = context.executeFetchRequest(request, error: nil)!
         
         for workoutData in data {
             var wData:NSManagedObject = workoutData as NSManagedObject
@@ -83,11 +83,12 @@ class MyWorkoutsViewController: UIViewController, UITableViewDataSource, UITable
         return allWorkouts
     }
     
-    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int{
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         return workouts.count
     }
     
-    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell!{
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         var cell = tableView.dequeueReusableCellWithIdentifier("WorkoutNameCell", forIndexPath: indexPath)  as NameTableViewCell
         
         if countElements(workouts[indexPath.row].name)==0 {
@@ -97,7 +98,7 @@ class MyWorkoutsViewController: UIViewController, UITableViewDataSource, UITable
         return cell
     }
 
-    func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat{
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat{
         return 50
     }
 

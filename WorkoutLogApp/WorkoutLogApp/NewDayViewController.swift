@@ -52,7 +52,7 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         
         if sender as? UIBarButtonItem == addButton {
             day = Day(name: name.text)
@@ -65,11 +65,11 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
             day = nil
         }
         else {
-            let row = tableView.indexPathForSelectedRow().row
+            let row = tableView.indexPathForSelectedRow()?.row
             if row != lifts.count {
                 var destination = segue.destinationViewController as NewExerciseViewController
-                destination.lift = lifts[row]
-                destination.tableRow = row
+                destination.lift = lifts[row!]
+                destination.tableRow = row!
             }
         }
         
@@ -77,11 +77,11 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     
-    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int{
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         return lifts.count + 1
     }
     
-    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell!{
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         var cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as NameTableViewCell
         
         if indexPath.row == lifts.count {
@@ -99,7 +99,7 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
     
-    func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat{
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat{
         return 50
     }
     

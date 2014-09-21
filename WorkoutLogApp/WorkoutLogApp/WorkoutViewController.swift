@@ -25,17 +25,17 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
         self.navigationItem.title = day.name
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         updateDatabase()
     }
 
     
-    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return day.lifts.count
     }
-
     
-    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell:ExerciseTableViewCell
         var lift:Lift = day.lifts[indexPath.row] as Lift
@@ -83,7 +83,7 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
         return cell
     }
 
-    func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat{
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat{
         if day.lifts[indexPath.row].sets>5 {
             return 258
         } else {
@@ -92,19 +92,19 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
         
     }
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView!) -> Int{
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView!, numberOfRowsInComponent component: Int) -> Int{
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
         return 300
     }
     
-    func pickerView(pickerView: UIPickerView!, titleForRow row: Int, forComponent component: Int) -> String!{
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String!{
         let num:Double = Double(row) * increment
         return removeZero("\(num)")
     }
-
+    
     func removeZero(num:String)->String{
         var text:String = num
         if text.hasSuffix(".0") {

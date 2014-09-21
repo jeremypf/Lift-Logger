@@ -14,12 +14,12 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
     var workoutData:NSManagedObject!
     var rows = [AnyObject]()
     
-    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int{
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         refreshData()
         return rows.count
     }
     
-    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell!{
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         
         var cell:LiftSummaryTableViewCell
         
@@ -42,13 +42,13 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
         else if indexPath.row == 0 || rows[indexPath.row+1] is String{
             println(rows[indexPath.row])
             cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as LiftSummaryTableViewCell
-            cell.name.text = rows[indexPath.row+2].valueForKeyPath("lift.day.name") as String
+            cell.name.text = rows[indexPath.row+2].valueForKeyPath("lift.day.name") as? String
             //cell.summary.text = rows[indexPath.row+2].valueForKey("date") as String
         }
         else {
             println(rows[indexPath.row])
             cell = tableView.dequeueReusableCellWithIdentifier("LiftNameCell", forIndexPath: indexPath) as LiftSummaryTableViewCell
-            cell.name.text = rows[indexPath.row+1].valueForKeyPath("lift.name") as String
+            cell.name.text = rows[indexPath.row+1].valueForKeyPath("lift.name") as? String
         }
             
         return cell
@@ -79,7 +79,7 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
         sortDescriptors.append(NSSortDescriptor(key: "setNumber", ascending: true))
         request.sortDescriptors = sortDescriptors
         request.predicate = NSPredicate(format: "lift.day.workout.name= %@", workoutData.valueForKey("name") as String)
-        var data:NSArray = context.executeFetchRequest(request, error: nil)
+        var data:NSArray = context.executeFetchRequest(request, error: nil)!
         
         for setData in data {
             var set:NSManagedObject = setData as NSManagedObject

@@ -263,7 +263,7 @@ class ExerciseTableViewCell: UITableViewCell {
     //if the set has been done, even if its not fully completed
     func completeSet(button :SetButton){
         
-        if button.titleForState(.Normal).toInt() < lift.reps{
+        if button.titleForState(.Normal)?.toInt() < lift.reps{
             button.setBackgroundImage(UIImage(named: "buttonImage2.png"), forState: .Normal)
             button.setTitleColor(UIColor.blueColor(), forState: .Normal)
         } else {

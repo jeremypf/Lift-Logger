@@ -46,7 +46,7 @@ class NewExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     }
     
     
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         
         if sender as? UIButton == deleteButton {
             lift = nil
@@ -63,11 +63,11 @@ class NewExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     }
     
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView!) -> Int{
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
         return 2
     }
     
-    func pickerView(pickerView: UIPickerView!, numberOfRowsInComponent component: Int) -> Int{
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
         if component == 0 {
             return 10
         }
@@ -76,7 +76,7 @@ class NewExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         }
     }
     
-    func pickerView(pickerView: UIPickerView!, titleForRow row: Int, forComponent component: Int) -> String!{
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String{
         return String(row + 1)
         
     }
