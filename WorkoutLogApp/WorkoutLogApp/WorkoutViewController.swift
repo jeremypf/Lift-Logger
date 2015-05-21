@@ -47,9 +47,9 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
         }
         
         if lift.sets<=5{
-            cell = tableView.dequeueReusableCellWithIdentifier("ExerciseCell3", forIndexPath: indexPath) as ExerciseTableViewCell
+            cell = tableView.dequeueReusableCellWithIdentifier("ExerciseCell3", forIndexPath: indexPath) as! ExerciseTableViewCell
         } else {
-            cell = tableView.dequeueReusableCellWithIdentifier("ExerciseCell4", forIndexPath: indexPath) as ExerciseTableViewCell
+            cell = tableView.dequeueReusableCellWithIdentifier("ExerciseCell4", forIndexPath: indexPath) as! ExerciseTableViewCell
         }
         
         cell.liftName.text = lift.name.uppercaseString
@@ -108,7 +108,7 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
     func removeZero(num:String)->String{
         var text:String = num
         if text.hasSuffix(".0") {
-            text = text.substringToIndex(advance(text.startIndex, countElements(text)-2))
+            text = text.substringToIndex(advance(text.startIndex, count(text)-2))
         }
         return text
     }
@@ -117,17 +117,17 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
     
     func updateDatabase(){
         
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         var context:NSManagedObjectContext = appDelegate.managedObjectContext!
         
-        var liftDataSet:NSSet = dayData.valueForKeyPath("lifts") as NSSet
+        var liftDataSet:NSSet = dayData.valueForKeyPath("lifts") as! NSSet
         
         let date = NSDate()
         
         for (index,lift) in enumerate(day.lifts) {
             for lData in liftDataSet {
-                if lData.valueForKey("name") as String == lift.name {
-                    var liftData:NSManagedObject = lData as NSManagedObject
+                if lData.valueForKey("name") as! String == lift.name {
+                    var liftData:NSManagedObject = lData as! NSManagedObject
                     
                     var finished:Bool = true
                     var finishedWeight:Double = cells[index].sets[0].weight
@@ -144,7 +144,7 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
                             finished = false
                         }
                         
-                        var newSet = NSEntityDescription.insertNewObjectForEntityForName("CompletedSet", inManagedObjectContext: context) as NSManagedObject
+                        var newSet = NSEntityDescription.insertNewObjectForEntityForName("CompletedSet", inManagedObjectContext: context) as! NSManagedObject
                         newSet.setValue(set.reps, forKey: "reps")
                         newSet.setValue(set.weight, forKey: "weight")
                         newSet.setValue(date, forKey: "date")
@@ -156,8 +156,8 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
                         println(set.weight)
                     }
                     
-                    if finished && finishedWeight >= Double(liftData.valueForKey("weight") as NSNumber){
-                        let newWeight:Double = finishedWeight + Double(liftData.valueForKey("increment") as NSNumber)
+                    if finished && finishedWeight >= Double(liftData.valueForKey("weight") as! NSNumber){
+                        let newWeight:Double = finishedWeight + Double(liftData.valueForKey("increment") as! NSNumber)
                         liftData.setValue(newWeight, forKey: "weight")
                     }
 

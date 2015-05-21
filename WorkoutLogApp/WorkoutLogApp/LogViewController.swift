@@ -24,30 +24,30 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
         var cell:LiftSummaryTableViewCell
         
         if rows[indexPath.row] is NSManagedObject {
-            cell = tableView.dequeueReusableCellWithIdentifier("LiftSummaryCell", forIndexPath: indexPath) as LiftSummaryTableViewCell
+            cell = tableView.dequeueReusableCellWithIdentifier("LiftSummaryCell", forIndexPath: indexPath) as! LiftSummaryTableViewCell
             
-            let set:Int = rows[indexPath.row].valueForKey("setNumber") as Int
-            let equalSet:Int = rows[indexPath.row].valueForKey("equalSetNumber") as Int
+            let set:Int = rows[indexPath.row].valueForKey("setNumber") as! Int
+            let equalSet:Int = rows[indexPath.row].valueForKey("equalSetNumber") as! Int
             var setName:String = "\(set)"
             for var i=set+1;i<=equalSet;i++ {
                 setName+=",\(i)"
             }
             cell.name.text = setName
             
-            let reps:Int = rows[indexPath.row].valueForKey("reps") as Int
+            let reps:Int = rows[indexPath.row].valueForKey("reps") as! Int
             cell.summary.text = "\(reps)"
-            let weight:Double = rows[indexPath.row].valueForKey("weight") as Double
+            let weight:Double = rows[indexPath.row].valueForKey("weight") as! Double
             cell.summary2.text = "\(weight)"
         }
         else if indexPath.row == 0 || rows[indexPath.row+1] is String{
             println(rows[indexPath.row])
-            cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as LiftSummaryTableViewCell
+            cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as! LiftSummaryTableViewCell
             cell.name.text = rows[indexPath.row+2].valueForKeyPath("lift.day.name") as? String
             //cell.summary.text = rows[indexPath.row+2].valueForKey("date") as String
         }
         else {
             println(rows[indexPath.row])
-            cell = tableView.dequeueReusableCellWithIdentifier("LiftNameCell", forIndexPath: indexPath) as LiftSummaryTableViewCell
+            cell = tableView.dequeueReusableCellWithIdentifier("LiftNameCell", forIndexPath: indexPath) as! LiftSummaryTableViewCell
             cell.name.text = rows[indexPath.row+1].valueForKeyPath("lift.name") as? String
         }
             
@@ -68,7 +68,7 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
         
         rows.removeAll(keepCapacity: true)
         
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         var context:NSManagedObjectContext = appDelegate.managedObjectContext!
         var request = NSFetchRequest(entityName: "CompletedSet")
         
@@ -78,16 +78,16 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
         //sortDescriptors.append(NSSortDescriptor(key: "lift.name", ascending: false))
         sortDescriptors.append(NSSortDescriptor(key: "setNumber", ascending: true))
         request.sortDescriptors = sortDescriptors
-        request.predicate = NSPredicate(format: "lift.day.workout.name= %@", workoutData.valueForKey("name") as String)
+        request.predicate = NSPredicate(format: "lift.day.workout.name= %@", workoutData.valueForKey("name") as! String)
         var data:NSArray = context.executeFetchRequest(request, error: nil)!
         
         for setData in data {
-            var set:NSManagedObject = setData as NSManagedObject
+            var set:NSManagedObject = setData as! NSManagedObject
             
-            if rows.count != 0 && (set.valueForKeyPath("lift.day.name") as String) == (rows[rows.count-1].valueForKeyPath("lift.day.name") as String) && (set.valueForKeyPath("lift.name") as String) == (rows[rows.count-1].valueForKeyPath("lift.name") as String) {
+            if rows.count != 0 && (set.valueForKeyPath("lift.day.name") as! String) == (rows[rows.count-1].valueForKeyPath("lift.day.name") as! String) && (set.valueForKeyPath("lift.name") as! String) == (rows[rows.count-1].valueForKeyPath("lift.name") as! String) {
                 
-                if (set.valueForKeyPath("reps") as Int) == (rows[rows.count-1].valueForKeyPath("reps") as Int) && (set.valueForKeyPath("weight") as Double) == (rows[rows.count-1].valueForKeyPath("weight") as Double){
-                    rows[rows.count-1].setValue(set.valueForKey("setNumber") as Int, forKey: "equalSetNumber")
+                if (set.valueForKeyPath("reps") as! Int) == (rows[rows.count-1].valueForKeyPath("reps") as! Int) && (set.valueForKeyPath("weight") as! Double) == (rows[rows.count-1].valueForKeyPath("weight") as! Double){
+                    rows[rows.count-1].setValue(set.valueForKey("setNumber") as! Int, forKey: "equalSetNumber")
                 }
                 else {
                     rows.append(set)
@@ -95,7 +95,7 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
                 
             }
             else{
-                if rows.count==0 || (set.valueForKeyPath("lift.day.name") as String) != (rows[rows.count-1].valueForKeyPath("lift.day.name") as String) || (set.valueForKey("date") as NSDate) != (rows[rows.count-1].valueForKey("date") as NSDate){
+                if rows.count==0 || (set.valueForKeyPath("lift.day.name") as! String) != (rows[rows.count-1].valueForKeyPath("lift.day.name") as! String) || (set.valueForKey("date") as! NSDate) != (rows[rows.count-1].valueForKey("date") as! NSDate){
                     rows.append("day")
                 }
                 rows.append("lift")

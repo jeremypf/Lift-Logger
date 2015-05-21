@@ -22,7 +22,7 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
     
     @IBAction func unwindToDay(segue:UIStoryboardSegue) {
         
-        let sourceController = segue.sourceViewController as NewExerciseViewController
+        let sourceController = segue.sourceViewController as! NewExerciseViewController
         if sourceController.tableRow == -1 {
             lifts.append(sourceController.lift!)
         }
@@ -67,7 +67,7 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
         else {
             let row = tableView.indexPathForSelectedRow()?.row
             if row != lifts.count {
-                var destination = segue.destinationViewController as NewExerciseViewController
+                var destination = segue.destinationViewController as! NewExerciseViewController
                 destination.lift = lifts[row!]
                 destination.tableRow = row!
             }
@@ -82,14 +82,14 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        var cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as NameTableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as! NameTableViewCell
         
         if indexPath.row == lifts.count {
             cell.name.text = "+ Add New Lift"
             cell.name.textColor = UIColor.blueColor()
         }
         else{
-            if countElements(lifts[indexPath.row].name)==0 {
+            if count(lifts[indexPath.row].name)==0 {
                 lifts[indexPath.row].name = "Lift \(indexPath.row+1)"
             }
             cell.name.text = lifts[indexPath.row].name

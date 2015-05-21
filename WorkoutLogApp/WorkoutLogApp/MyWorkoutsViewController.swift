@@ -40,7 +40,7 @@ class MyWorkoutsViewController: UIViewController, UITableViewDataSource, UITable
         
         if segue.identifier == "toWorkout" {
             let row = tableView.indexPathForSelectedRow()?.row
-            var destination = segue.destinationViewController as WorkoutSummaryViewController
+            var destination = segue.destinationViewController as! WorkoutSummaryViewController
             destination.workout = workouts[row!]
             destination.workoutData = allWorkoutData[row!]
         }
@@ -52,27 +52,27 @@ class MyWorkoutsViewController: UIViewController, UITableViewDataSource, UITable
         var allWorkouts = [Workout]()
         allWorkoutData.removeAll(keepCapacity: true)
         
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         var context:NSManagedObjectContext = appDelegate.managedObjectContext!
         var request = NSFetchRequest(entityName: "Workout")
         var data:NSArray = context.executeFetchRequest(request, error: nil)!
         
         for workoutData in data {
-            var wData:NSManagedObject = workoutData as NSManagedObject
+            var wData:NSManagedObject = workoutData as! NSManagedObject
             
             allWorkoutData.append(wData)//adds workout NSManagedObject to allworkoutdata
             
-            var workout:Workout = Workout(name: wData.valueForKey("name") as String)
-            var dayDataSet:NSSet = wData.valueForKeyPath("days") as NSSet
+            var workout:Workout = Workout(name: wData.valueForKey("name") as! String)
+            var dayDataSet:NSSet = wData.valueForKeyPath("days") as! NSSet
             
             for dayData in dayDataSet {
-                var dData:NSManagedObject = dayData as NSManagedObject
-                var day:Day = Day(name: dData.valueForKey("name") as String)
-                var liftDataSet:NSSet = dData.valueForKeyPath("lifts") as NSSet
+                var dData:NSManagedObject = dayData as! NSManagedObject
+                var day:Day = Day(name: dData.valueForKey("name") as! String)
+                var liftDataSet:NSSet = dData.valueForKeyPath("lifts") as! NSSet
                 
                 for liftData in liftDataSet {
-                    var lData:NSManagedObject = liftData as NSManagedObject
-                    var lift:Lift = Lift(name: lData.valueForKey("name") as String, sets: lData.valueForKey("sets") as Int, reps: lData.valueForKey("reps") as Int, weight: lData.valueForKey("weight") as Double, increment: lData.valueForKey("increment") as Double)
+                    var lData:NSManagedObject = liftData as! NSManagedObject
+                    var lift:Lift = Lift(name: lData.valueForKey("name") as! String, sets: lData.valueForKey("sets") as! Int, reps: lData.valueForKey("reps") as! Int, weight: lData.valueForKey("weight") as! Double, increment: lData.valueForKey("increment") as! Double)
                     day.lifts.append(lift)
                 }
                 workout.days.append(day)
@@ -89,9 +89,9 @@ class MyWorkoutsViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        var cell = tableView.dequeueReusableCellWithIdentifier("WorkoutNameCell", forIndexPath: indexPath)  as NameTableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("WorkoutNameCell", forIndexPath: indexPath)  as! NameTableViewCell
         
-        if countElements(workouts[indexPath.row].name)==0 {
+        if count(workouts[indexPath.row].name)==0 {
             workouts[indexPath.row].name = "Workout \(indexPath.row+1)"
         }
         cell.name.text = workouts[indexPath.row].name

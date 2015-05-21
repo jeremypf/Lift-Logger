@@ -316,7 +316,7 @@ class ExerciseTableViewCell: UITableViewCell {
     func removeZero(num:String)->String{
         var text:String = num
         if text.hasSuffix(".0") {
-            text = text.substringToIndex(advance(text.startIndex, countElements(text)-2))
+            text = text.substringToIndex(advance(text.startIndex, count(text)-2))
         }
         return text
     }

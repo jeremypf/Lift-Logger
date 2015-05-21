@@ -21,7 +21,7 @@ class NewWorkoutViewController: UIViewController, UITableViewDataSource, UITable
     
     @IBAction func unwindToNewWorkout(segue:UIStoryboardSegue) {
         
-        let sourceController = segue.sourceViewController as NewDayViewController
+        let sourceController = segue.sourceViewController as! NewDayViewController
         if sourceController.tableRow == -1 {
             days.append(sourceController.day!)
         }
@@ -45,19 +45,19 @@ class NewWorkoutViewController: UIViewController, UITableViewDataSource, UITable
                 workout!.days.append(day)
             }
             
-            var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+            var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             var context:NSManagedObjectContext = appDelegate.managedObjectContext!
             
             
             
-            var newWorkout = NSEntityDescription.insertNewObjectForEntityForName("Workout", inManagedObjectContext: context) as NSManagedObject
+            var newWorkout = NSEntityDescription.insertNewObjectForEntityForName("Workout", inManagedObjectContext: context) as! NSManagedObject
             newWorkout.setValue(workout!.name, forKey: "name")
             
             //var workoutDays = newWorkout.valueForKeyPath("days") as NSMutableSet
             
             for (index,day) in enumerate(workout!.days) {
                 
-                var newDay = NSEntityDescription.insertNewObjectForEntityForName("Day", inManagedObjectContext: context) as NSManagedObject
+                var newDay = NSEntityDescription.insertNewObjectForEntityForName("Day", inManagedObjectContext: context) as! NSManagedObject
                 newDay.setValue(day.name, forKey: "name")
                 newDay.setValue(index, forKey: "order")
                 
@@ -65,7 +65,7 @@ class NewWorkoutViewController: UIViewController, UITableViewDataSource, UITable
                 
                 for (index,lift) in enumerate(day.lifts) {
                     
-                    var newLift = NSEntityDescription.insertNewObjectForEntityForName("Lift", inManagedObjectContext: context) as NSManagedObject
+                    var newLift = NSEntityDescription.insertNewObjectForEntityForName("Lift", inManagedObjectContext: context) as! NSManagedObject
                     
                     newLift.setValue(lift.name, forKey: "name")
                     newLift.setValue(lift.sets, forKey: "sets")
@@ -88,7 +88,7 @@ class NewWorkoutViewController: UIViewController, UITableViewDataSource, UITable
         else {//if press on a table cell
             let row = tableView.indexPathForSelectedRow()?.row
             if row != days.count {
-                var destination = segue.destinationViewController as NewDayViewController
+                var destination = segue.destinationViewController as! NewDayViewController
                 destination.day = days[row!]
                 destination.tableRow = row!
                 
@@ -113,14 +113,14 @@ class NewWorkoutViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        var cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as NameTableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as! NameTableViewCell
         
         if indexPath.row == days.count {
             cell.name.text = "+ Add New Day"
             cell.name.textColor = UIColor.blueColor()
         }
         else{
-            if countElements(days[indexPath.row].name)==0 {
+            if count(days[indexPath.row].name)==0 {
                 days[indexPath.row].name = "Day \(indexPath.row+1)"
             }
             cell.name.text = days[indexPath.row].name
