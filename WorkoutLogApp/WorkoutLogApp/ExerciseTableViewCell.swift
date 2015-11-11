@@ -176,7 +176,7 @@ class ExerciseTableViewCell: UITableViewCell {
     }
     
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         lastClicked = SetButton()
         textColour = lastClicked.currentTitleColor
         lift = Lift(name: "name", sets: 0, reps: 0, weight: 0, increment: 2.5)
@@ -263,7 +263,7 @@ class ExerciseTableViewCell: UITableViewCell {
     //if the set has been done, even if its not fully completed
     func completeSet(button :SetButton){
         
-        if button.titleForState(.Normal)?.toInt() < lift.reps{
+        if Int((button.titleForState(.Normal))!) < lift.reps{
             button.setBackgroundImage(UIImage(named: "buttonImage2.png"), forState: .Normal)
             button.setTitleColor(UIColor.blueColor(), forState: .Normal)
         } else {
@@ -316,7 +316,7 @@ class ExerciseTableViewCell: UITableViewCell {
     func removeZero(num:String)->String{
         var text:String = num
         if text.hasSuffix(".0") {
-            text = text.substringToIndex(advance(text.startIndex, count(text)-2))
+            text = text.substringToIndex(text.startIndex.advancedBy(text.characters.count-2))
         }
         return text
     }

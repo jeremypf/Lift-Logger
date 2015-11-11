@@ -40,13 +40,13 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
             cell.summary2.text = "\(weight)"
         }
         else if indexPath.row == 0 || rows[indexPath.row+1] is String{
-            println(rows[indexPath.row])
+            print(rows[indexPath.row])
             cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as! LiftSummaryTableViewCell
             cell.name.text = rows[indexPath.row+2].valueForKeyPath("lift.day.name") as? String
             //cell.summary.text = rows[indexPath.row+2].valueForKey("date") as String
         }
         else {
-            println(rows[indexPath.row])
+            print(rows[indexPath.row])
             cell = tableView.dequeueReusableCellWithIdentifier("LiftNameCell", forIndexPath: indexPath) as! LiftSummaryTableViewCell
             cell.name.text = rows[indexPath.row+1].valueForKeyPath("lift.name") as? String
         }
@@ -68,9 +68,9 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
         
         rows.removeAll(keepCapacity: true)
         
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        var context:NSManagedObjectContext = appDelegate.managedObjectContext!
-        var request = NSFetchRequest(entityName: "CompletedSet")
+        let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context:NSManagedObjectContext = appDelegate.managedObjectContext!
+        let request = NSFetchRequest(entityName: "CompletedSet")
         
         var sortDescriptors = [NSSortDescriptor]()
         sortDescriptors.append(NSSortDescriptor(key: "date", ascending: false))
@@ -79,10 +79,10 @@ class LogViewController: UIViewController, UITableViewDataSource, UITableViewDel
         sortDescriptors.append(NSSortDescriptor(key: "setNumber", ascending: true))
         request.sortDescriptors = sortDescriptors
         request.predicate = NSPredicate(format: "lift.day.workout.name= %@", workoutData.valueForKey("name") as! String)
-        var data:NSArray = context.executeFetchRequest(request, error: nil)!
+        let data:NSArray = try! context.executeFetchRequest(request)
         
         for setData in data {
-            var set:NSManagedObject = setData as! NSManagedObject
+            let set:NSManagedObject = setData as! NSManagedObject
             
             if rows.count != 0 && (set.valueForKeyPath("lift.day.name") as! String) == (rows[rows.count-1].valueForKeyPath("lift.day.name") as! String) && (set.valueForKeyPath("lift.name") as! String) == (rows[rows.count-1].valueForKeyPath("lift.name") as! String) {
                 

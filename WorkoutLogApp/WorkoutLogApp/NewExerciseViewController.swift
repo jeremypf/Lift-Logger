@@ -53,12 +53,12 @@ class NewExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         }
         else {
         
-            let weightString:NSString = weight.text as NSString
-            let incString:NSString = increment.text as NSString
+            let weightString:NSString = weight.text! as NSString
+            let incString:NSString = increment.text! as NSString
             
             //println(picker.selectedRowInComponent(1)+1)
     
-            lift = Lift(name: name.text, sets: picker.selectedRowInComponent(0)+1, reps: picker.selectedRowInComponent(1)+1, weight: weightString.doubleValue, increment: incString.doubleValue)
+            lift = Lift(name: name.text!, sets: picker.selectedRowInComponent(0)+1, reps: picker.selectedRowInComponent(1)+1, weight: weightString.doubleValue, increment: incString.doubleValue)
         }
     }
     
@@ -86,7 +86,7 @@ class NewExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     func removeZero(num:String)->String{
         var text:String = num
         if text.hasSuffix(".0") {
-            text = text.substringToIndex(advance(text.startIndex, count(text)-2))
+            text = text.substringToIndex(text.startIndex.advancedBy(text.characters.count-2))
         }
         return text
     }

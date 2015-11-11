@@ -38,7 +38,7 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var cell:ExerciseTableViewCell
-        var lift:Lift = day.lifts[indexPath.row] as Lift
+        let lift:Lift = day.lifts[indexPath.row] as Lift
         
         if lift.sets>10 {
             lift.sets = 10
@@ -108,7 +108,7 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
     func removeZero(num:String)->String{
         var text:String = num
         if text.hasSuffix(".0") {
-            text = text.substringToIndex(advance(text.startIndex, count(text)-2))
+            text = text.substringToIndex(text.startIndex.advancedBy(text.characters.count-2))
         }
         return text
     }
@@ -117,22 +117,22 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
     
     func updateDatabase(){
         
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        var context:NSManagedObjectContext = appDelegate.managedObjectContext!
+        let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context:NSManagedObjectContext = appDelegate.managedObjectContext!
         
-        var liftDataSet:NSSet = dayData.valueForKeyPath("lifts") as! NSSet
+        let liftDataSet:NSSet = dayData.valueForKeyPath("lifts") as! NSSet
         
         let date = NSDate()
         
-        for (index,lift) in enumerate(day.lifts) {
+        for (index,lift) in day.lifts.enumerate() {
             for lData in liftDataSet {
                 if lData.valueForKey("name") as! String == lift.name {
-                    var liftData:NSManagedObject = lData as! NSManagedObject
+                    let liftData:NSManagedObject = lData as! NSManagedObject
                     
                     var finished:Bool = true
                     var finishedWeight:Double = cells[index].sets[0].weight
                     
-                    for (setIndex,set) in enumerate(cells[index].sets) {
+                    for (setIndex,set) in cells[index].sets.enumerate() {
                         
                         let setTime = NSDate()
                         
@@ -144,7 +144,7 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
                             finished = false
                         }
                         
-                        var newSet = NSEntityDescription.insertNewObjectForEntityForName("CompletedSet", inManagedObjectContext: context) as! NSManagedObject
+                        let newSet = NSEntityDescription.insertNewObjectForEntityForName("CompletedSet", inManagedObjectContext: context) 
                         newSet.setValue(set.reps, forKey: "reps")
                         newSet.setValue(set.weight, forKey: "weight")
                         newSet.setValue(date, forKey: "date")
@@ -152,8 +152,8 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
                         newSet.setValue(setIndex+1, forKey: "setNumber")
                         
                         liftData.mutableSetValueForKeyPath("completedSets").addObject(newSet)
-                        print(set.reps)
-                        println(set.weight)
+                        print(set.reps, terminator: "")
+                        print(set.weight)
                     }
                     
                     if finished && finishedWeight >= Double(liftData.valueForKey("weight") as! NSNumber){
@@ -167,7 +167,10 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
                         
         }
         
-        context.save(nil)
+        do {
+            try context.save()
+        } catch _ {
+        }
 
     }
     
@@ -175,17 +178,17 @@ class WorkoutViewController: UIViewController , UITableViewDataSource, UITableVi
     //not using this at the moment
     @IBAction func finishWorkout(sender: AnyObject) {
         
-        var alertController = UIAlertController(title: "Finish Workout?", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: "Finish Workout?", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
         
-        var finishAction = UIAlertAction(title: "Finish", style: UIAlertActionStyle.Default) {
+        let finishAction = UIAlertAction(title: "Finish", style: UIAlertActionStyle.Default) {
             UIAlertAction in
-            println("test")
+            print("test")
             self.performSegueWithIdentifier("unwindToWorkoutSummary", sender: self)
         }
         
-        var cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default) {
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default) {
             UIAlertAction in
-            println("cancel")
+            print("cancel")
         }
         
         alertController.addAction(cancelAction)

@@ -40,32 +40,32 @@ class NewWorkoutViewController: UIViewController, UITableViewDataSource, UITable
         
         if sender as? UIBarButtonItem == createButton{
             
-            workout = Workout(name: name.text)
+            workout = Workout(name: name.text!)
             for day in days {
                 workout!.days.append(day)
             }
             
-            var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            var context:NSManagedObjectContext = appDelegate.managedObjectContext!
+            let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let context:NSManagedObjectContext = appDelegate.managedObjectContext!
             
             
             
-            var newWorkout = NSEntityDescription.insertNewObjectForEntityForName("Workout", inManagedObjectContext: context) as! NSManagedObject
+            let newWorkout = NSEntityDescription.insertNewObjectForEntityForName("Workout", inManagedObjectContext: context) 
             newWorkout.setValue(workout!.name, forKey: "name")
             
             //var workoutDays = newWorkout.valueForKeyPath("days") as NSMutableSet
             
-            for (index,day) in enumerate(workout!.days) {
+            for (index,day) in workout!.days.enumerate() {
                 
-                var newDay = NSEntityDescription.insertNewObjectForEntityForName("Day", inManagedObjectContext: context) as! NSManagedObject
+                let newDay = NSEntityDescription.insertNewObjectForEntityForName("Day", inManagedObjectContext: context) 
                 newDay.setValue(day.name, forKey: "name")
                 newDay.setValue(index, forKey: "order")
                 
                 //var dayLifts = newDay.valueForKeyPath("lifts") as NSMutableSet
                 
-                for (index,lift) in enumerate(day.lifts) {
+                for (index,lift) in day.lifts.enumerate() {
                     
-                    var newLift = NSEntityDescription.insertNewObjectForEntityForName("Lift", inManagedObjectContext: context) as! NSManagedObject
+                    let newLift = NSEntityDescription.insertNewObjectForEntityForName("Lift", inManagedObjectContext: context) 
                     
                     newLift.setValue(lift.name, forKey: "name")
                     newLift.setValue(lift.sets, forKey: "sets")
@@ -79,22 +79,25 @@ class NewWorkoutViewController: UIViewController, UITableViewDataSource, UITable
                 newWorkout.mutableSetValueForKeyPath("days").addObject(newDay)
             }
             
-            context.save(nil)
+            do {
+                try context.save()
+            } catch _ {
+            }
             
         }
         else if sender as? UIBarButtonItem == cancelButton{
             workout = nil
         }
         else {//if press on a table cell
-            let row = tableView.indexPathForSelectedRow()?.row
+            let row = tableView.indexPathForSelectedRow?.row
             if row != days.count {
-                var destination = segue.destinationViewController as! NewDayViewController
+                let destination = segue.destinationViewController as! NewDayViewController
                 destination.day = days[row!]
                 destination.tableRow = row!
                 
                 for lift in destination.day!.lifts {
                     destination.lifts.append(lift)
-                    println(lift.name)
+                    print(lift.name)
                 }
             }
         }
@@ -113,14 +116,14 @@ class NewWorkoutViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        var cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as! NameTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as! NameTableViewCell
         
         if indexPath.row == days.count {
             cell.name.text = "+ Add New Day"
             cell.name.textColor = UIColor.blueColor()
         }
         else{
-            if count(days[indexPath.row].name)==0 {
+            if days[indexPath.row].name.characters.count==0 {
                 days[indexPath.row].name = "Day \(indexPath.row+1)"
             }
             cell.name.text = days[indexPath.row].name

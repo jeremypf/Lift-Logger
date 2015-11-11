@@ -55,7 +55,7 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         
         if sender as? UIBarButtonItem == addButton {
-            day = Day(name: name.text)
+            day = Day(name: name.text!)
             
             for lift in lifts {
                 day!.lifts.append(lift)
@@ -65,9 +65,9 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
             day = nil
         }
         else {
-            let row = tableView.indexPathForSelectedRow()?.row
+            let row = tableView.indexPathForSelectedRow?.row
             if row != lifts.count {
-                var destination = segue.destinationViewController as! NewExerciseViewController
+                let destination = segue.destinationViewController as! NewExerciseViewController
                 destination.lift = lifts[row!]
                 destination.tableRow = row!
             }
@@ -82,14 +82,14 @@ class NewDayViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-        var cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as! NameTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("DayNameCell", forIndexPath: indexPath) as! NameTableViewCell
         
         if indexPath.row == lifts.count {
             cell.name.text = "+ Add New Lift"
             cell.name.textColor = UIColor.blueColor()
         }
         else{
-            if count(lifts[indexPath.row].name)==0 {
+            if lifts[indexPath.row].name.characters.count==0 {
                 lifts[indexPath.row].name = "Lift \(indexPath.row+1)"
             }
             cell.name.text = lifts[indexPath.row].name

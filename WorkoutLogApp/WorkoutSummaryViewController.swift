@@ -28,14 +28,14 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         
         if segue.identifier == "startSession" {
-            let row = tableView.indexPathForSelectedRow()?.row
-            var destination = segue.destinationViewController as!WorkoutViewController
+            let row = tableView.indexPathForSelectedRow?.row
+            let destination = segue.destinationViewController as!WorkoutViewController
             destination.day = rows[row!] as! Day
             
-            var dayDataSet:NSSet = workoutData.valueForKeyPath("days") as!NSSet
+            let dayDataSet:NSSet = workoutData.valueForKeyPath("days") as!NSSet
             
             for dayData in dayDataSet {
-                var day:NSManagedObject = dayData as!NSManagedObject
+                let day:NSManagedObject = dayData as!NSManagedObject
                 if day.valueForKey("name") as!String == destination.day.name {
                     destination.dayData = dayData as! NSManagedObject
                     return
@@ -43,7 +43,7 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
             }
         }
         else if segue.identifier == "toLog" {
-            var destination = segue.destinationViewController as!LogViewController
+            let destination = segue.destinationViewController as!LogViewController
             destination.workoutData = workoutData
         }
     }
@@ -70,15 +70,15 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         
         if rows[indexPath.row] is Day {
-            var cell = tableView.dequeueReusableCellWithIdentifier("DaySummaryCell", forIndexPath: indexPath) as!NameTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("DaySummaryCell", forIndexPath: indexPath) as!NameTableViewCell
             cell.name.text = (rows[indexPath.row] as!Day).name
             
             return cell
         }
         //else
-        var cell = tableView.dequeueReusableCellWithIdentifier("LiftSummaryCell", forIndexPath: indexPath)  as!LiftSummaryTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("LiftSummaryCell", forIndexPath: indexPath)  as!LiftSummaryTableViewCell
         
-        var lift = rows[indexPath.row] as!Lift
+        let lift = rows[indexPath.row] as!Lift
         cell.name.text = lift.name
         cell.summary.text = "\(lift.sets) x \(lift.reps)  \(lift.getWeight())lb"
         
@@ -99,38 +99,38 @@ class WorkoutSummaryViewController: UIViewController, UITableViewDataSource, UIT
         
         var tempWorkout:Workout
         
-        var appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as!AppDelegate
-        var context:NSManagedObjectContext = appDelegate.managedObjectContext!
-        var request = NSFetchRequest(entityName: "Workout")
+        let appDelegate:AppDelegate = UIApplication.sharedApplication().delegate as!AppDelegate
+        let context:NSManagedObjectContext = appDelegate.managedObjectContext!
+        let request = NSFetchRequest(entityName: "Workout")
         request.predicate = NSPredicate(format: "name= %@", workout.name)
         
         /*var sortDescriptors = [NSSortDescriptor]()
         sortDescriptors.append(NSSortDescriptor(key: "order", ascending: true))
         request.sortDescriptors = sortDescriptors*/
         
-        var data:NSArray = context.executeFetchRequest(request, error: nil)!
+        let data:NSArray = try! context.executeFetchRequest(request)
         
-        var wData:NSManagedObject = data[0] as!NSManagedObject
+        let wData:NSManagedObject = data[0] as!NSManagedObject
         
         workoutData = wData
         tempWorkout = Workout(name: wData.valueForKey("name") as!String)
-        var dayDataSet:NSSet = wData.valueForKeyPath("days") as!NSSet
+        let dayDataSet:NSSet = wData.valueForKeyPath("days") as!NSSet
         
         
         for dayData in dayDataSet {
-            var dData:NSManagedObject = dayData as!NSManagedObject
-            var day:Day = Day(name: dData.valueForKey("name") as!String)
-            var liftDataSet:NSSet = dData.valueForKeyPath("lifts") as!NSSet
+            let dData:NSManagedObject = dayData as!NSManagedObject
+            let day:Day = Day(name: dData.valueForKey("name") as!String)
+            let liftDataSet:NSSet = dData.valueForKeyPath("lifts") as!NSSet
             
             for liftData in liftDataSet {
-                var lData:NSManagedObject = liftData as!NSManagedObject
-                var lift:Lift = Lift(name: lData.valueForKey("name") as!String, sets: lData.valueForKey("sets") as! Int, reps: lData.valueForKey("reps") as! Int, weight: lData.valueForKey("weight") as! Double, increment: lData.valueForKey("increment") as! Double)
+                let lData:NSManagedObject = liftData as!NSManagedObject
+                let lift:Lift = Lift(name: lData.valueForKey("name") as!String, sets: lData.valueForKey("sets") as! Int, reps: lData.valueForKey("reps") as! Int, weight: lData.valueForKey("weight") as! Double, increment: lData.valueForKey("increment") as! Double)
                 day.lifts.append(lift)
             }
             tempWorkout.days.append(day)
         }
         
         workout = tempWorkout
-        println(workout.name)
+        print(workout.name)
     }
 }

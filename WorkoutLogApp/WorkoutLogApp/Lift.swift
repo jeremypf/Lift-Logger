@@ -27,7 +27,7 @@ class Lift {
     func getWeight()->String{
         var text:String = "\(weight)"
         if text.hasSuffix(".0") {
-            text = text.substringToIndex(advance(text.startIndex, count(text)-2))
+            text = text.substringToIndex(text.startIndex.advancedBy(text.characters.count-2))
         }
         return text
     }
